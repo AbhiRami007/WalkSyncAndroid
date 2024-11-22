@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Dashboard -->
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Dashboard" />
+
+    <!-- Compass -->
+    <item
+        android:id="@+id/navigation_compass"
+        android:icon="@drawable/ic_compass"
+        android:title="Compass" />
+
+    <!-- Profile -->
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+
+    <!-- Settings -->
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
+</menu>

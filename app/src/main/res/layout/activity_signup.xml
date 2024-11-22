@@ -1,6 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Started"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_gravity="start"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fill up the registration to get started with your fitness journey."
+            android:textSize="16sp"
+            android:textColor="#757575"
+            android:lineSpacingExtra="4dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Full Name -->
+        <EditText
+            android:id="@+id/full_name"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Full Name"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Email"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Daily Calorie Intake -->
+        <EditText
+            android:id="@+id/calorie_intake"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Daily Calorie Intake"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Current Weight -->
+        <EditText
+            android:id="@+id/weight"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Current Weight"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Current Height -->
+        <EditText
+            android:id="@+id/height"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Current Height"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Password"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword" />
+
+        <!-- Confirm Password -->
+        <EditText
+            android:id="@+id/confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Confirm Password"
+            android:textSize="16sp"
+            android:hintTextColor="#BDBDBD"
+            android:textColor="#212121"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:inputType="textPassword" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:backgroundTint="#F5F5F5"
+                android:textColor="#9E9E9E"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Register Now"
+                android:backgroundTint="#FF7043"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

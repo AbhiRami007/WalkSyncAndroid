@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="417dp"
+        android:layout_height="729dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Title -->
+
+        <!-- Full Name -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="407dp"
+            android:layout_height="71dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="200dp"
+            android:text="Edit Profile"
+            android:textColor="#212121"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edit_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Full Name"
+            android:hintTextColor="#BDBDBD"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <!-- Daily Calorie Intake -->
+        <EditText
+            android:id="@+id/edit_calorie_intake"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Daily Calorie Intake"
+            android:hintTextColor="#BDBDBD"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <!-- Current Weight -->
+        <EditText
+            android:id="@+id/edit_weight"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Current Weight"
+            android:hintTextColor="#BDBDBD"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <!-- Current Height -->
+        <EditText
+            android:id="@+id/edit_height"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Current Height"
+            android:hintTextColor="#BDBDBD"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/edit_btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="#F5F5F5"
+                android:text="Cancel"
+                android:textColor="#9E9E9E" />
+
+            <Button
+                android:id="@+id/edit_btn_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#FF7043"
+                android:text="Save"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="409dp"
+        android:layout_height="62dp"
+        android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+</androidx.constraintlayout.widget.ConstraintLayout>
