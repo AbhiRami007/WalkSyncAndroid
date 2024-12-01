@@ -8,10 +8,10 @@
     android:background="@color/white">
 
     <LinearLayout
-        android:layout_width="417dp"
-        android:layout_height="729dp"
+        android:layout_width="0dp"
+        android:layout_height="999dp"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +22,10 @@
         <!-- Full Name -->
         <TextView
             android:id="@+id/title"
-            android:layout_width="407dp"
+            android:layout_width="match_parent"
             android:layout_height="71dp"
             android:layout_gravity="start"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="100dp"
             android:text="Edit Profile"
             android:textColor="#212121"
             android:textSize="28sp"
@@ -38,7 +38,6 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text_background"
             android:hint="Full Name"
-            android:hintTextColor="#BDBDBD"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="#212121"
@@ -52,7 +51,6 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text_background"
             android:hint="Daily Calorie Intake"
-            android:hintTextColor="#BDBDBD"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="#212121"
@@ -66,7 +64,19 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text_background"
             android:hint="Current Weight"
-            android:hintTextColor="#BDBDBD"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <!-- Goal Weight -->
+        <EditText
+            android:id="@+id/edit_goal_weight"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="Goal Weight"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="#212121"
@@ -80,7 +90,6 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/edit_text_background"
             android:hint="Current Height"
-            android:hintTextColor="#BDBDBD"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="#212121"
@@ -91,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <Button
@@ -115,12 +125,12 @@
     </LinearLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="409dp"
-        android:layout_height="62dp"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:background="@color/white"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
