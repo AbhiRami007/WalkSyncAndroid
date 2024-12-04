@@ -79,21 +79,24 @@ public class ProfileActivity extends AppCompatActivity {
         // Handle navigation item clicks
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        // Set the selected item for this activity
+        bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_profile) {
-                // Stay on the dashboard
+            if (item.getItemId() == R.id.navigation_dashboard) {
+                startActivity(new Intent(ProfileActivity.this, Dashboard.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_compass) {
-                // Navigate to the Compass activity
                 startActivity(new Intent(ProfileActivity.this, CompassActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
-            } else if (item.getItemId() == R.id.navigation_dashboard) {
-                // Navigate to the Profile activity
-                startActivity(new Intent(ProfileActivity.this, Dashboard.class));
+            } else if (item.getItemId() == R.id.navigation_profile) {
+                // Already on Profile
                 return true;
             } else if (item.getItemId() == R.id.navigation_settings) {
-                // Navigate to the Settings activity
                 startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;

@@ -41,22 +41,24 @@ public class SettingsActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Handle navigation item clicks
+        // Set the selected item for this activity
+        bottomNavigationView.setSelectedItemId(R.id.navigation_settings);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_settings) {
-                // Stay on the dashboard
+            if (item.getItemId() == R.id.navigation_dashboard) {
+                startActivity(new Intent(SettingsActivity.this, Dashboard.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_compass) {
-                // Navigate to the Compass activity
                 startActivity(new Intent(SettingsActivity.this, CompassActivity.class));
-                return true;
-            } else if (item.getItemId() == R.id.navigation_dashboard) {
-                // Navigate to the Profile activity
-                startActivity(new Intent(SettingsActivity.this, Dashboard.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_profile) {
-                // Navigate to the Settings activity
                 startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_settings) {
+                // Already on Settings
                 return true;
             }
             return false;

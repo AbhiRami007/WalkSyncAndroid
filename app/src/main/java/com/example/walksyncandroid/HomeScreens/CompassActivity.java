@@ -46,17 +46,25 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         // Register bottom navigation listener
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Set the selected item for this activity
+        bottomNavigationView.setSelectedItemId(R.id.navigation_compass);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_compass) {
-                return true;
-            } else if (item.getItemId() == R.id.navigation_dashboard) {
+            if (item.getItemId() == R.id.navigation_dashboard) {
                 startActivity(new Intent(CompassActivity.this, Dashboard.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.navigation_compass) {
+                // Already on Compass
                 return true;
             } else if (item.getItemId() == R.id.navigation_profile) {
                 startActivity(new Intent(CompassActivity.this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_settings) {
                 startActivity(new Intent(CompassActivity.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;

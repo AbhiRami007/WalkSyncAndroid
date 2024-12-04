@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.example.walksyncandroid.R;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,22 +73,30 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         walkingDistanceTextView = findViewById(R.id.walking_distance);
         speedTextView = findViewById(R.id.speed);
         startTrackingButton = findViewById(R.id.start_tracking_button);
-        activityLogButton = findViewById(R.id.activity_log_btn);
+        activityLogButton = findViewById(R.id.activity_log_button);
 
         // Initialize bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        // Set the selected item for this activity
+        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_dashboard) {
+                // Already on Dashboard
                 return true;
             } else if (item.getItemId() == R.id.navigation_compass) {
                 startActivity(new Intent(Dashboard.this, CompassActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_profile) {
                 startActivity(new Intent(Dashboard.this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.navigation_settings) {
                 startActivity(new Intent(Dashboard.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;
@@ -109,7 +118,7 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         startTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateNotification("Tracking", "Your activities are being monitored");
+                generateNotification("Tracking Started", "Your activities are being monitored");
                 if (isTracking) {
                     stopTracking();
                 } else {
@@ -119,10 +128,15 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         });
 
         activityLogButton.setOnClickListener(v -> {
+            Log.d("Dashboard", "Activity Log button clicked");
+
+
             Intent intent = new Intent(Dashboard.this, ActivityLog.class);
             intent.putExtra("steps", stepsCount);
             intent.putExtra("distance", walkingDistance);
             intent.putExtra("speed", speed);
+
+            Log.d("Dashboard", "Passing data to ActivityLog: steps=" + stepsCount + ", distance=" + walkingDistance + ", speed=" + speed);
             startActivity(intent);
         });
     }
@@ -194,10 +208,12 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
     private void stopTracking() {
         isTracking = false;
         startTrackingButton.setText("Start Tracking");
+        generateNotification("Tracking Stopped", "No Longer Monitoring");
         initialSteps=0;
         // Unregister sensor and location listeners
         sensorManager.unregisterListener(this);
         locationManager.removeUpdates(this);
+        Log.d("Dashboard", "Tracking stopped");
     }
 
     @Override
@@ -231,9 +247,23 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (isTracking) {
-            speed = location.getSpeed() * 3.6; // Convert from m/s to km/h
+            if (location.hasSpeed()) {
+                // Use GPS speed data
+                speed = location.getSpeed() * 3.6; // Convert from m/s to km/h
+            } else {
+                // Fallback: Calculate speed from distance/time if needed
+                speed = calculateSpeedFallback(location);
+            }
+
+            // Update UI
             speedTextView.setText(String.format("%.2f km/h", speed));
+            Log.d("Dashboard", "Speed updated: " + speed + " km/h");
         }
+    }
+    private double calculateSpeedFallback(Location location) {
+        // Custom logic to calculate speed if needed
+        // For example: distance/time between two location updates
+        return 0.0; // Placeholder value
     }
 
     @Override

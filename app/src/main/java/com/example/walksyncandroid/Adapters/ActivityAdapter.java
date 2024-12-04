@@ -36,7 +36,31 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ActivityItem item = activityItems.get(position);
-        holder.title.setText(item.getTitle());
+        // Set data to the TextViews based on the item's title
+        switch (item.getTitle()) {
+            case "Steps":
+                holder.stepsValue.setText(item.getValue());
+                break;
+
+            case "Walking Distance":
+                holder.walkingAverageValue.setText(item.getValue());
+                break;
+
+            case "Standing":
+                holder.standingValue.setText(item.getValue());
+                break;
+
+            case "Avg. Speed":
+                holder.avgSpeedValue.setText(item.getValue());
+                break;
+
+            case "Time":
+                holder.time.setText(item.getValue());
+                break;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -45,11 +69,17 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
+        TextView stepsValue, walkingAverageValue, standingValue, avgSpeedValue, time;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title_text);
+
+            // Initialize TextViews
+            stepsValue = itemView.findViewById(R.id.steps_value);
+            walkingAverageValue = itemView.findViewById(R.id.walking_average_value);
+            standingValue = itemView.findViewById(R.id.standing_value);
+            avgSpeedValue = itemView.findViewById(R.id.avg_speed_value);
+            time = itemView.findViewById(R.id.time);
         }
     }
 }

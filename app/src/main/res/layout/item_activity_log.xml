@@ -22,6 +22,7 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/steps_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -30,6 +31,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/steps_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,6 +50,7 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/walking_average_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -56,6 +59,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/walking_average_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -74,6 +78,7 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/standing_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -82,6 +87,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/standing_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -100,6 +106,7 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/avg_speed_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -108,6 +115,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/avg_speed_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -120,6 +128,7 @@
 
         <!-- Time -->
         <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

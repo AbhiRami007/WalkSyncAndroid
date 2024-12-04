@@ -1,6 +1,7 @@
 package com.example.walksyncandroid.HomeScreens;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,10 +41,12 @@ public class ActivityLog extends AppCompatActivity {
             activityItemList.add(new ActivityItem("Walking Distance", String.format("%.2f km", distance)));
             activityItemList.add(new ActivityItem("Speed", String.format("%.2f km/h", speed)));
         } else {
+
             // Dummy data for illustration
             activityItemList.add(new ActivityItem("Steps", "2930 steps"));
             activityItemList.add(new ActivityItem("Walking Distance", "5 km"));
             activityItemList.add(new ActivityItem("Speed", "10 km/hr"));
+            Log.d("ActivityLog", "No new data to display");
         }
 
         adapter = new ActivityAdapter(activityItemList);

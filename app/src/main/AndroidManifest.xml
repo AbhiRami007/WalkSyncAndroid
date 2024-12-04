@@ -41,6 +41,8 @@
         <activity android:name=".HomeScreens.ProfileActivity" />
         <activity android:name=".HomeScreens.SettingsActivity" />
         <activity android:name=".HomeScreens.EditProfileActivity" />
+        <activity android:name=".HomeScreens.ActivityLog" />
+
 
         <receiver android:name=".HomeScreens.DailyReminderReceiver" />
         <service
