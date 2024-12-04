@@ -3,9 +3,9 @@ package com.example.walksyncandroid.HomeScreens;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,22 +20,18 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+
 import com.example.walksyncandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
-
 
 public class Dashboard extends AppCompatActivity implements SensorEventListener, LocationListener {
 
@@ -50,11 +46,11 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
 
     private Handler handler = new Handler();
     private int stepsCount = 0;
+    private int initialSteps = 0; // To track starting step count
     private double walkingDistance = 0.0;
     private double speed = 0.0;
 
     private LocationManager locationManager;
-
     private boolean isTracking = false;
 
     @Override
@@ -62,12 +58,14 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         super.onCreate(savedInstanceState);
         createNotificationChannel();
         setContentView(R.layout.activity_dashboard);
+
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         boolean dailyNotificationsEnabled = sharedPreferences.getBoolean("daily_notifications", false);
-        Log.i("TAG", "onCreate: dailyNotificationsEnabled"+dailyNotificationsEnabled);
+        Log.i("TAG", "onCreate: dailyNotificationsEnabled " + dailyNotificationsEnabled);
         if (dailyNotificationsEnabled) {
             scheduleDailyReminder(this);
         }
+
         // Initialize views
         activityStatusTextView = findViewById(R.id.subtitle_activity);
         stepsTextView = findViewById(R.id.steps_count);
@@ -78,6 +76,7 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
 
         // Initialize bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_dashboard) {
                 return true;
@@ -107,11 +106,15 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         checkPermissions();
 
         // Handle start/stop tracking button
-        startTrackingButton.setOnClickListener(v -> {
-            if (isTracking) {
-                stopTracking();
-            } else {
-                startTracking();
+        startTrackingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                generateNotification("Tracking", "Your activities are being monitored");
+                if (isTracking) {
+                    stopTracking();
+                } else {
+                    startTracking();
+                }
             }
         });
 
@@ -126,19 +129,39 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Daily Reminder Channel";
-            String description = "Channel for daily reminders";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            CharSequence app_name = getString(R.string.app_name);
+            int notification_importance = NotificationManager.IMPORTANCE_DEFAULT;
 
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
-            channel.setDescription(description);
-
+            NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), app_name, notification_importance);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
         }
     }
+
+    private void generateNotification(String title, String message) {
+        // Create an to redirect to main activity on notification click
+        Intent intent = new Intent(this, Dashboard.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.channel_id))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true); // Automatically remove the notification when clicked
+
+        // Show the notification
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(R.string.notification_id, builder.build());
+    }
+
+
     private void checkPermissions() {
         // Check Activity Recognition permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
@@ -159,6 +182,7 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         // Register step counter sensor listener
         if (stepCounterSensor != null) {
             sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+            initialSteps = stepsCount; // Save the current steps as the baseline
         }
 
         // Request location updates for speed
@@ -170,7 +194,7 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
     private void stopTracking() {
         isTracking = false;
         startTrackingButton.setText("Start Tracking");
-
+        initialSteps=0;
         // Unregister sensor and location listeners
         sensorManager.unregisterListener(this);
         locationManager.removeUpdates(this);
@@ -179,8 +203,17 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (isTracking && event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            stepsCount = (int) event.values[0];
+            if (initialSteps==0) {
+                // Set the initialSteps to the first value when tracking starts
+                initialSteps = (int) event.values[0];
+            }
+            // Calculate relative step count
+            stepsCount = (int) event.values[0] - initialSteps;
+
+            // Calculate walking distance
             walkingDistance = stepsCount * 0.0008; // Approximation: 0.8 meters per step
+
+            // Update the UI
             stepsTextView.setText(stepsCount + " steps");
             walkingDistanceTextView.setText(String.format("%.2f km", walkingDistance));
 
@@ -188,6 +221,7 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
             checkNotifications();
         }
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -206,7 +240,6 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Start location updates if permission granted
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
             }
@@ -217,23 +250,26 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         boolean goalNotificationsEnabled = sharedPreferences.getBoolean("goal_notifications", false);
 
-        // Goal notification condition
-        if (goalNotificationsEnabled) {
+        if (goalNotificationsEnabled && stepsCount >= 30) { // Trigger notification on goal
             showGoalNotification();
         }
-
     }
 
     private void showGoalNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(this, Dashboard.class); // Open the Dashboard activity
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
         Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 .setContentTitle("Goal Reached!")
                 .setContentText("You have reached your goal of 1000 steps today!")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.notification) // Use a valid icon
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build();
@@ -256,20 +292,16 @@ public class Dashboard extends AppCompatActivity implements SensorEventListener,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        long interval = 10 * 1000; // 4 hours in milliseconds
+        long interval = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
         long triggerAtMillis = System.currentTimeMillis() + interval;
 
         if (alarmManager != null) {
-            alarmManager.setRepeating(
+            alarmManager.setInexactRepeating(
                     AlarmManager.RTC_WAKEUP,
                     triggerAtMillis,
                     interval,
                     pendingIntent
             );
-            Log.i("TAG", "scheduleDailyReminder: Reminder scheduled every 4 hours.");
-        } else {
-            Log.e("TAG", "AlarmManager is null. Reminder not scheduled.");
         }
     }
-
 }

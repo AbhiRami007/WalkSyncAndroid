@@ -4,24 +4,33 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.walksyncandroid.DatabaseHelper;
+import com.example.walksyncandroid.OnboardingScreens.LoginActivity;
+import com.example.walksyncandroid.OnboardingScreens.OnboardingActivity;
+import com.example.walksyncandroid.OnboardingScreens.SignupActivity;
 import com.example.walksyncandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView name, email, calorie_intake, weight, height, goal_weight;
     private DatabaseHelper databaseHelper;
+    private Button btnLogout;
     private String userEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         TextView editProfile = findViewById(R.id.editProfile);
+
+        // Retrieve logged-in user's email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 
         // Retrieve the logged-in user's email
         userEmail = getLoggedInUserEmail();
@@ -39,7 +48,32 @@ public class ProfileActivity extends AppCompatActivity {
         weight = findViewById(R.id.current_weight);
         goal_weight = findViewById(R.id.goal_weight);
         height = findViewById(R.id.height);
+        btnLogout = findViewById(R.id.logout_button);
 
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                // Stop the MusicService
+                stopService(new Intent(ProfileActivity.this, MusicService.class));
+
+
+                // Reset music playing state in Settings preferences
+                SharedPreferences settingsPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+                SharedPreferences.Editor settingsEditor = settingsPreferences.edit();
+                settingsEditor.putBoolean("music_playing", false);
+                settingsEditor.apply();
+
+                // Redirect the user to LoginActivity
+                Intent intent = new Intent(ProfileActivity.this, OnboardingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+                startActivity(intent);
+                finish();
+            }
+        });
         // Load user data
         loadUserData();
         // Handle navigation item clicks
@@ -68,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
         });
     }
+
 
     // Method to retrieve the logged-in user's email from SharedPreferences
     private String getLoggedInUserEmail() {

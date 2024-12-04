@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">WalkSyncAndroid</string>
+    <string name="name">ABHIRAMI PRADEEP SUSI</string>
+    <string name="app_description">MUSIC NOTIFICATIONS</string>
+    <string name="channel_name">Notification channel</string>
+    <string name="channel_id">aps channel</string>
+    <string name="notification_id">1</string>
+    <string name="button_text">Let\'s Go</string>
+    <string name="title">"Starting Music"</string>
+    <string name="message">"Your background music is starting."</string>
 </resources>

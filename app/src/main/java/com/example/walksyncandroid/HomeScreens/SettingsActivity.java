@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.CheckBox;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,10 +13,32 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingsActivity extends AppCompatActivity {
     private CheckBox checkboxGoalNotifications, checkboxDailyNotifications;
+    private Switch playMusicSwitch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        playMusicSwitch = findViewById(R.id.switch_play_music);
+
+        // Load saved preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        boolean isMusicPlaying = sharedPreferences.getBoolean("music_playing", false);
+        playMusicSwitch.setChecked(isMusicPlaying);
+
+        playMusicSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("music_playing", isChecked);
+            editor.apply();
+
+            if (isChecked) {
+                startService(new Intent(this, MusicService.class)); // Start music service
+            } else {
+                stopService(new Intent(this, MusicService.class)); // Stop music service
+            }
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         // Handle navigation item clicks
@@ -43,12 +66,11 @@ public class SettingsActivity extends AppCompatActivity {
         checkboxGoalNotifications = findViewById(R.id.checkbox_goal_notifications);
         checkboxDailyNotifications = findViewById(R.id.checkbox_daily_notifications);
 
-        // Load saved preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        // Load saved preferences for checkboxes
         checkboxGoalNotifications.setChecked(sharedPreferences.getBoolean("goal_notifications", false));
         checkboxDailyNotifications.setChecked(sharedPreferences.getBoolean("daily_notifications", false));
 
-        // Save preferences when they change
+        // Save preferences when checkboxes change
         checkboxGoalNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("goal_notifications", isChecked);
